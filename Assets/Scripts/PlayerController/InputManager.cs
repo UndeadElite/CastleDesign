@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -46,6 +47,13 @@ public class InputManager : MonoBehaviour
     {
         return playercontroller.Player.Jump.triggered;
     }
+
+    public bool PlayerCrouchedThisFrame()
+    {
+        return playercontroller.Player.Crouch.triggered;
+    }
+
+
 
 }
 

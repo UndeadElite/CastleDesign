@@ -5,7 +5,6 @@ public class NavigationScript : MonoBehaviour
 
     public Transform Player;
     private NavMeshAgent agent;
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
