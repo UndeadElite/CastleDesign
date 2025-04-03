@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         inputManager = InputManager.Instance;
         cameraTransform = Camera.main.transform;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -63,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isCrouching)
         {
+           
+                    
             if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + 0.1f))
             {
                 controller.height = normalHeight;

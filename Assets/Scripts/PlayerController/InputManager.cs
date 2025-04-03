@@ -53,6 +53,11 @@ public class InputManager : MonoBehaviour
         return playercontroller.Player.Crouch.triggered;
     }
 
+    public bool PlayerAttack()
+    {
+        return playercontroller.Player.Attack.triggered;
+    }
+
 
 
 }
