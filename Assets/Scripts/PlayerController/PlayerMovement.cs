@@ -68,8 +68,8 @@ public class PlayerMovement : MonoBehaviour
                     
             if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + 0.1f))
             {
-               controller.height = normalHeight;
-            isCrouching = false;
+                controller.height = normalHeight;
+                isCrouching = false;
             }
         }
         else
