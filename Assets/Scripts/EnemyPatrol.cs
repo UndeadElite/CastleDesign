@@ -41,4 +41,5 @@ public class EnemyPatrol : MonoBehaviour
             agent.SetDestination(currentTarget.position);
         }
     }
+   
 }
