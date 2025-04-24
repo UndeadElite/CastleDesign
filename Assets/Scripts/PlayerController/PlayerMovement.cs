@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Crouch Settings")]
     [SerializeField] private float normalHeight = 2.0f;
     [SerializeField] private float crouchHeight = 1.2f;
-    
+
     [Header("Attacking")]
     public float attackDistance = 3f;
     public float attackDelay = 0.4f;
@@ -27,9 +27,9 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip swordSwing;
     public AudioClip hitSound;
 
-    bool attacking = false;
-    bool readyToAttack = true;
-    int attackCount;
+    private bool attacking = false;
+    private bool readyToAttack = true;
+    private int attackCount;
 
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -38,18 +38,26 @@ public class PlayerMovement : MonoBehaviour
 
     private InputManager inputManager;
     private Transform cameraTransform;
-    Animator animator;
-    AudioSource audioSource;
+    private Animator animator;
+    private AudioSource audioSource;
+
+    // Animation states
+    private const string IDLE = "Idle";
+    private const string WALK = "Walk";
+    private const string ATTACK1 = "Attack 1";
+    private const string ATTACK2 = "Attack 2";
+
+    private string currentAnimationState;
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         inputManager = InputManager.Instance;
         cameraTransform = Camera.main.transform;
-      
+        animator = GetComponentInChildren<Animator>();
     }
 
-    void Awake()
+    private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
@@ -61,13 +69,14 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
         {
             playerVelocity.y = 0f;
         }
+
         Vector2 movementInput = inputManager.GetPlayerMovement();
         Vector3 move = new Vector3(movementInput.x, 0f, movementInput.y);
         move = cameraTransform.forward * move.z + cameraTransform.right * move.x;
@@ -93,14 +102,14 @@ public class PlayerMovement : MonoBehaviour
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+
+        SetAnimations(move);
     }
 
-    void ToggleCrouch()
+    private void ToggleCrouch()
     {
         if (isCrouching)
         {
-           
-                    
             if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + 0.1f))
             {
                 controller.height = normalHeight;
@@ -113,8 +122,6 @@ public class PlayerMovement : MonoBehaviour
             isCrouching = true;
         }
     }
-
-
 
     public void Attack()
     {
@@ -131,32 +138,31 @@ public class PlayerMovement : MonoBehaviour
 
         if (attackCount == 0)
         {
-
+            ChangeAnimationState(ATTACK1);
             attackCount++;
         }
         else
         {
+            ChangeAnimationState(ATTACK2);
             attackCount = 0;
         }
     }
 
-    void ResetAttack()
+    private void ResetAttack()
     {
         attacking = false;
         readyToAttack = true;
     }
 
-    void AttackRaycast()
+    private void AttackRaycast()
     {
         Vector3 rayOrigin = cameraTransform.position;
         Vector3 rayDirection = cameraTransform.forward;
 
         Debug.DrawRay(rayOrigin, rayDirection * attackDistance, Color.red, 1f);
-        Debug.Log("1");
 
         if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, attackDistance, attackLayer))
         {
-            Debug.Log("Hit: " + hit.collider.name);
             HitTarget(hit.point);
 
             if (hit.transform.TryGetComponent<NavigationScript>(out NavigationScript target))
@@ -164,23 +170,37 @@ public class PlayerMovement : MonoBehaviour
                 target.TakeDamage(attackDamage);
             }
         }
-        else
-        {
-            Debug.Log("No target hit.");
-        }
     }
 
-
-
-
-    void HitTarget(Vector3 pos)
+    private void HitTarget(Vector3 pos)
     {
         audioSource.pitch = 1;
         audioSource.PlayOneShot(hitSound);
 
         GameObject GO = Instantiate(hitEffect, pos, Quaternion.identity);
-        
+        Destroy(GO, 20);
+    }
+
+    private void ChangeAnimationState(string newState)
+    {
+        if (currentAnimationState == newState) return;
+
+        currentAnimationState = newState;
+        animator.CrossFadeInFixedTime(currentAnimationState, 0.2f);
+    }
+
+    private void SetAnimations(Vector3 move)
+    {
+        if (!attacking)
+        {
+            if (move.magnitude < 0.1f)
+            {
+                ChangeAnimationState(IDLE);
+            }
+            else
+            {
+                ChangeAnimationState(WALK);
+            }
+        }
     }
 }
-
-
