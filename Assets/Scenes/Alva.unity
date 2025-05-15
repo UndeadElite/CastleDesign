@@ -1090,6 +1090,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 561c6f03f0c430742aeaea3d4fe2c566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressurePlateAnimator: {fileID: 2110308880}
+  doorAnimator: {fileID: 1036144370}
 --- !u!1 &2140322651
 GameObject:
   m_ObjectHideFlags: 0
