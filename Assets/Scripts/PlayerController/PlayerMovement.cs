@@ -34,27 +34,29 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
-    private bool isCrouching = false;
+    public bool isCrouching = false;
 
     private InputManager inputManager;
     private Transform cameraTransform;
     private Animator animator;
     private AudioSource audioSource;
 
-    // Animation states
-    private const string IDLE = "Idle";
-    private const string WALK = "Walk";
-    private const string ATTACK1 = "Attack 1";
-    private const string ATTACK2 = "Attack 2";
+    private const float CrouchRaycastOffset = 0.1f;
 
-    private string currentAnimationState;
+    private enum AnimationState { Idle, Walk, Attack1, Attack2 }
+    private AnimationState currentAnimationState;
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         inputManager = InputManager.Instance;
-        cameraTransform = Camera.main.transform;
+        cameraTransform = Camera.main?.transform;
         animator = GetComponentInChildren<Animator>();
+
+        if (cameraTransform == null)
+            Debug.LogError("Main Camera is missing!");
+        if (animator == null)
+            Debug.LogError("Animator component is missing!");
     }
 
     private void Awake()
@@ -110,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isCrouching)
         {
-            if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + 0.1f))
+            if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + CrouchRaycastOffset))
             {
                 controller.height = normalHeight;
                 isCrouching = false;
@@ -127,29 +129,32 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!readyToAttack || attacking) return;
 
+        StartCoroutine(PerformAttack());
+    }
+
+    private System.Collections.IEnumerator PerformAttack()
+    {
         readyToAttack = false;
         attacking = true;
-
-        Invoke(nameof(ResetAttack), attackSpeed);
-        Invoke(nameof(AttackRaycast), attackDelay);
 
         audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.PlayOneShot(swordSwing);
 
         if (attackCount == 0)
         {
-            ChangeAnimationState(ATTACK1);
+            ChangeAnimationState(AnimationState.Attack1);
             attackCount++;
         }
         else
         {
-            ChangeAnimationState(ATTACK2);
+            ChangeAnimationState(AnimationState.Attack2);
             attackCount = 0;
         }
-    }
 
-    private void ResetAttack()
-    {
+        yield return new WaitForSeconds(attackDelay);
+        AttackRaycast();
+
+        yield return new WaitForSeconds(attackSpeed - attackDelay);
         attacking = false;
         readyToAttack = true;
     }
@@ -181,12 +186,12 @@ public class PlayerMovement : MonoBehaviour
         Destroy(GO, 20);
     }
 
-    private void ChangeAnimationState(string newState)
+    private void ChangeAnimationState(AnimationState newState)
     {
         if (currentAnimationState == newState) return;
 
         currentAnimationState = newState;
-        animator.CrossFadeInFixedTime(currentAnimationState, 0.2f);
+        animator.CrossFadeInFixedTime(newState.ToString(), 0.2f);
     }
 
     private void SetAnimations(Vector3 move)
@@ -195,11 +200,11 @@ public class PlayerMovement : MonoBehaviour
         {
             if (move.magnitude < 0.1f)
             {
-                ChangeAnimationState(IDLE);
+                ChangeAnimationState(AnimationState.Idle);
             }
             else
             {
-                ChangeAnimationState(WALK);
+                ChangeAnimationState(AnimationState.Walk);
             }
         }
     }
