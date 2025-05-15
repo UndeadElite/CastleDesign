@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask attackLayer;
 
     public GameObject hitEffect;
-    public AudioClip swordSwing;
-    public AudioClip hitSound;
+    public AudioSource swordSwing;
+    public AudioSource hitSound;
 
     private bool attacking = false;
     private bool readyToAttack = true;
@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         inputManager = InputManager.Instance;
-        cameraTransform = Camera.main?.transform;
+        cameraTransform = Camera.main.transform;
         animator = GetComponentInChildren<Animator>();
 
         if (cameraTransform == null)
@@ -108,22 +108,45 @@ public class PlayerMovement : MonoBehaviour
         SetAnimations(move);
     }
 
+    private Coroutine crouchCoroutine;
+
     private void ToggleCrouch()
     {
+        if (crouchCoroutine != null)
+        {
+            StopCoroutine(crouchCoroutine);
+        }
+
         if (isCrouching)
         {
             if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + CrouchRaycastOffset))
             {
-                controller.height = normalHeight;
+                crouchCoroutine = StartCoroutine(SmoothCrouchTransition(controller.height, normalHeight));
                 isCrouching = false;
             }
         }
         else
         {
-            controller.height = crouchHeight;
+            crouchCoroutine = StartCoroutine(SmoothCrouchTransition(controller.height, crouchHeight));
             isCrouching = true;
         }
     }
+
+    private System.Collections.IEnumerator SmoothCrouchTransition(float startHeight, float targetHeight)
+    {
+        float elapsedTime = 0f;
+        float duration = 0.2f;
+
+        while (elapsedTime < duration)
+        {
+            controller.height = Mathf.Lerp(startHeight, targetHeight, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        controller.height = targetHeight;
+    }
+
 
     public void Attack()
     {
@@ -136,9 +159,9 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToAttack = false;
         attacking = true;
-
         audioSource.pitch = Random.Range(0.9f, 1.1f);
-        audioSource.PlayOneShot(swordSwing);
+        Debug.Log("Playing swordSwing sound");
+        swordSwing.Play();
 
         if (attackCount == 0)
         {
@@ -180,7 +203,10 @@ public class PlayerMovement : MonoBehaviour
     private void HitTarget(Vector3 pos)
     {
         audioSource.pitch = 1;
-        audioSource.PlayOneShot(hitSound);
+        Debug.Log("Playing hitSound sound");
+       hitSound.Play();
+
+       
 
         GameObject GO = Instantiate(hitEffect, pos, Quaternion.identity);
         Destroy(GO, 20);
