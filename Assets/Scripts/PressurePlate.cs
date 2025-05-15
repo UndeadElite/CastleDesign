@@ -1,25 +1,16 @@
 using UnityEngine;
 
-public class PressurePlate : MonoBehaviour
+public class PressurePlateTrigger : MonoBehaviour
 {
-    
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    public Animator pressurePlateAnimator;
+    public Animator doorAnimator;
 
     private void OnTriggerEnter(Collider other)
     {
-       
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        
+        if (other.CompareTag("Player"))
+        {
+            pressurePlateAnimator.SetTrigger("PressPlate");
+            doorAnimator.SetTrigger("OpenDoor");
+        }
     }
 }
