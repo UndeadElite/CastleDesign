@@ -1,6 +1,7 @@
 using UnityEngine;
+using static Interactor;
 
-public class PickUpObject : MonoBehaviour
+public class PickUpObject : MonoBehaviour, IInteractable
 {
     public GameObject PickUpText;
     public GameObject ObjectOnPlayer;
@@ -9,27 +10,17 @@ public class PickUpObject : MonoBehaviour
     void Start()
     {
         ObjectOnPlayer.SetActive(false);
-        PickUpText.SetActive(false);
+        if (PickUpText != null) PickUpText.SetActive(false);
     }
-
-    private void OnTriggerStay(Collider other)
+    //fix only show the text when looking at it
+    public void Interact()
     {
-        if (other.CompareTag("Player"))
+        if (!playerIsHolding)
         {
-            PickUpText.SetActive(true);
-
-            if (Input.GetKeyDown(KeyCode.E) && !playerIsHolding)
-            {
-                playerIsHolding = true;
-                this.gameObject.SetActive(false);
-                ObjectOnPlayer.SetActive(true);
-                PickUpText.SetActive(false);
-            }
+            playerIsHolding = true;
+            gameObject.SetActive(false);
+            ObjectOnPlayer.SetActive(true);
+            if (PickUpText != null) PickUpText.SetActive(false);
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        PickUpText.SetActive(false);
     }
 }
