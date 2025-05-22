@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - HidingSpot
+  - Enemy
+  - Wood
+  - Stone
+  - Glass
   layers:
   - Default
   - TransparentFX

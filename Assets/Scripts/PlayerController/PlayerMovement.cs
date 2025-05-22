@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
     public int attackDamage = 1;
     public LayerMask attackLayer;
 
+    [Header("PlayerUI")]
+    [SerializeField] private PlayerUI playerUI;
+
+
     public GameObject hitEffect;
     public AudioSource swordSwing;
     public AudioSource hitEnemy;
@@ -58,9 +62,11 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         inputManager = InputManager.Instance;
-        cameraTransform = Camera.main.transform;
+        
         animator = GetComponentInChildren<Animator>();
         currentHealth = maxHealth;
+        if (playerUI != null)
+            playerUI.SetHealth(currentHealth, maxHealth);
 
         if (cameraTransform == null)
             Debug.LogError("Main Camera is missing!");
@@ -71,9 +77,12 @@ public class PlayerMovement : MonoBehaviour
 
     // Method to get current health
     public void TakeDamage(int damage)
-    {         if (isDead) return;
+    {
+        if (isDead) return;
         currentHealth -= damage;
         Debug.Log("Player took damage: " + damage + ", Current Health: " + currentHealth);
+        if (playerUI != null)
+            playerUI.SetHealth(currentHealth, maxHealth);
         if (currentHealth <= 0)
         {
             Die();
@@ -104,6 +113,10 @@ public class PlayerMovement : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        cameraTransform = Camera.main.transform;
+        if (cameraTransform == null)
+            Debug.LogError("Main Camera is missing!");
     }
 
     private void Update()
@@ -209,7 +222,7 @@ public class PlayerMovement : MonoBehaviour
             attackCount = 0;
         }
 
-        yield return new WaitForSeconds(attackDelay);
+        //yield return new WaitForSeconds(attackDelay);
         AttackRaycast();
 
         yield return new WaitForSeconds(attackSpeed - attackDelay);

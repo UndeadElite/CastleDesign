@@ -405,6 +405,7 @@ MonoBehaviour:
   gravityValue: -10
   normalHeight: 2
   crouchHeight: 1
+  maxHealth: 3
   attackDistance: 2.5
   attackDelay: 0.4
   attackSpeed: 1
@@ -412,6 +413,7 @@ MonoBehaviour:
   attackLayer:
     serializedVersion: 2
     m_Bits: 64
+  playerUI: {fileID: 0}
   hitEffect: {fileID: 2872285011265515196, guid: 88f23e1f90cc65d4c8387f28eb1bd069, type: 3}
   swordSwing: {fileID: 4132907338551936468}
   hitEnemy: {fileID: 7093135411073832576}
