@@ -9,7 +9,7 @@ public class CrossBowGuy : MonoBehaviour
     [SerializeField] 
 
     private Transform player;
-    private int currentPatrolIndex = 0;
+    private int currentPatrolIndex = 1;
     private float attackTimer = 0f;
 
     private void AttackPlayer()
