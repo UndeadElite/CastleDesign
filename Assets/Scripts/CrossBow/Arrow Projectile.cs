@@ -17,7 +17,7 @@ public class ArrowProjectile : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
            
-             collision.gameObject.GetComponent<NavigationScript>()?.TakeDamage(damage);
+             collision.gameObject.GetComponent<PlayerMovement>()?.TakeDamage(damage);
         }
 
         

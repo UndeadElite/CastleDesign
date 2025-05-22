@@ -4,13 +4,24 @@ public class NavigationScript : MonoBehaviour
 {
     public Transform Player;
     private NavMeshAgent agent;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
     }
+
     void Update()
     {
-        agent.destination = Player.position;
+        if (agent.enabled && agent.isActiveAndEnabled)
+        {
+            agent.destination = Player.position;
+        }
+    }
+
+    public void SetAgentMoving(bool moving)
+    {
+        if (agent == null) return;
+        agent.isStopped = !moving;
     }
 
     int currentHealth;
