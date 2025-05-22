@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float normalHeight = 2.0f;
     [SerializeField] private float crouchHeight = 1.2f;
 
+    [Header("Player Health")]
+    [SerializeField] private int maxHealth = 3;
+    private int currentHealth;
+    private bool isDead = false;    
+
     [Header("Attacking")]
     public float attackDistance = 3f;
     public float attackDelay = 0.4f;
@@ -25,7 +30,10 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject hitEffect;
     public AudioSource swordSwing;
-    public AudioSource hitSound;
+    public AudioSource hitEnemy;
+    public AudioSource hitStone;
+    public AudioSource hitWood;
+    public AudioSource hitGlass;
 
     private bool attacking = false;
     private bool readyToAttack = true;
@@ -52,11 +60,38 @@ public class PlayerMovement : MonoBehaviour
         inputManager = InputManager.Instance;
         cameraTransform = Camera.main.transform;
         animator = GetComponentInChildren<Animator>();
+        currentHealth = maxHealth;
 
         if (cameraTransform == null)
             Debug.LogError("Main Camera is missing!");
         if (animator == null)
             Debug.LogError("Animator component is missing!");
+       
+    }
+
+    // Method to get current health
+    public void TakeDamage(int damage)
+    {         if (isDead) return;
+        currentHealth -= damage;
+        Debug.Log("Player took damage: " + damage + ", Current Health: " + currentHealth);
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die ()
+    {
+        isDead = true;
+        Debug.Log("Player is dead!");
+        // turn off player movement
+        enabled = false;
+        controller.enabled = false;
+        // show Cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+
     }
 
     private void Awake()
@@ -191,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, attackDistance, attackLayer))
         {
-            HitTarget(hit.point);
+            HitTarget(hit);
 
             if (hit.transform.TryGetComponent<NavigationScript>(out NavigationScript target))
             {
@@ -200,15 +235,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HitTarget(Vector3 pos)
+    private void HitTarget(RaycastHit hit)
     {
         audioSource.pitch = 1;
-        Debug.Log("Playing hitSound sound");
-       hitSound.Play();
 
-       
+        // Play different sounds based on the object's tag
+        switch (hit.transform.tag)
+        {
+            case "Enemy":
+                if (hitEnemy != null) hitEnemy.Play();
+                break;
+            case "Stone":
+                if (hitStone != null) hitStone.Play();
+                break;
+            case "Wood":
+                if (hitWood != null) hitWood.Play();
+                break;
+            case "Glass":
+                if (hitGlass != null) hitGlass.Play();
+                break;
+        }
 
-        GameObject GO = Instantiate(hitEffect, pos, Quaternion.identity);
+        GameObject GO = Instantiate(hitEffect, hit.point, Quaternion.identity);
         Destroy(GO, 20);
     }
 
