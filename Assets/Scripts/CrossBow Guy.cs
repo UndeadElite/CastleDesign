@@ -6,6 +6,7 @@ public class CrossBowGuy : MonoBehaviour
     [SerializeField] Transform firePoint;// point where the arrow will be fired
     [SerializeField] float arrowSpeed = 20f;
     [SerializeField] GameObject arrowPrefab;
+    [SerializeField] 
 
     private Transform player;
     private int currentPatrolIndex = 0;
