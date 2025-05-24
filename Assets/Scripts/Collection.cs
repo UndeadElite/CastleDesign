@@ -2,31 +2,19 @@ using UnityEngine;
 
 public class Collection : MonoBehaviour
 {
- 
-    public static Collection Instance { get; private set; }
-    private int totalCoins = 0;
+    [SerializeField] private int value = 1;
 
-    private void Awake()
+
+    private void OnTriggerEnter(Collider other)
     {
-        // Ensure there's only one instance of the "Collection"
-        if (Instance == null)
+        if (other.CompareTag("Player"))
         {
-            Instance = this;
-        }
-        else
-        {
+           
             Destroy(gameObject);
         }
     }
 
-    public void AddCoins(int amount)
-    {
-        totalCoins += amount;
-        Debug.Log("Total Coins: " + totalCoins);
-    }
-
-    public int GetTotalCoins()
-    {
-        return totalCoins;
-    }
+  
 }
+
+

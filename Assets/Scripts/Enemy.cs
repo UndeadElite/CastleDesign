@@ -4,6 +4,13 @@ public class Enemy : MonoBehaviour
 {
     int EnemyHP = 2;
     PlayerMovement playerMovement;
+    private EnemyDrop enemyDrop;
+
+    private void Awake()
+    {
+        enemyDrop = GetComponent<EnemyDrop>();
+    }
+
     void Start()
     {
         
@@ -17,5 +24,13 @@ public class Enemy : MonoBehaviour
     void TakeDamage()
     {
         
+    }
+
+    private void Die()
+    {
+        if (enemyDrop != null)
+            enemyDrop.Drop();
+
+        Destroy(gameObject);
     }
 }

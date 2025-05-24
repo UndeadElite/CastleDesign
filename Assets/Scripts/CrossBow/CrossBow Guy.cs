@@ -12,6 +12,12 @@ public class CrossBowGuy : MonoBehaviour
     private Transform player;
     private float attackTimer = 0f;
     private NavCrossbow navigationScript;
+    private EnemyDrop enemyDrop;
+
+    private void Awake()
+    {
+        enemyDrop = GetComponent<EnemyDrop>();
+    }
 
     private void Start()
     {
@@ -74,5 +80,13 @@ public class CrossBowGuy : MonoBehaviour
 
         // Face the player while moving
         AimAtPlayer();
+    }
+
+    private void Die()
+    {
+        if (enemyDrop != null)
+            enemyDrop.Drop();
+
+        Destroy(gameObject);
     }
 }
