@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject swordObject;
 
 
+
     public GameObject hitEffect;
     public AudioSource swordSwing;
     public AudioSource hitEnemy;
@@ -114,10 +115,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.LogWarning("Missing AudioSource component on player!");
         }
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         cameraTransform = Camera.main.transform;
         if (cameraTransform == null)
             Debug.LogError("Main Camera is missing!");
@@ -204,6 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
         controller.height = targetHeight;
     }
+
     public void Attack()
     {
         if (!readyToAttack || attacking) return;
@@ -243,12 +243,19 @@ public class PlayerMovement : MonoBehaviour
         {
             HitTarget(hit);
 
-            // Only deal damage if sword is equipped
+            // Only deal damage or interact if sword is equipped
             if (swordObject != null && swordObject.activeSelf)
             {
+                // Interact with breakable objects
+                BreakableScript breakable = hit.transform.GetComponent<BreakableScript>();
+                if (breakable != null)
+                {
+                    breakable.Interact();
+                }
+
+                // Deal damage to enemies
                 if (hit.transform.CompareTag("Enemy"))
                 {
-                    // Try to get NavigationScript and deal damage if found
                     NavigationScript target = hit.transform.GetComponent<NavigationScript>();
                     if (target != null)
                     {
@@ -258,6 +265,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
     private void HitTarget(RaycastHit hit)
     {
         audioSource.pitch = 1;
