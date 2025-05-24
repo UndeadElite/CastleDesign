@@ -4,6 +4,7 @@ public class PressurePlateTrigger : MonoBehaviour
 {
     public Animator pressurePlateAnimator;
     public Animator doorAnimator;
+    public AudioSource doorCreaking;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,5 +15,16 @@ public class PressurePlateTrigger : MonoBehaviour
             doorAnimator.SetTrigger("OpenDoor");
 
         }
+
+        if (doorCreaking != null) 
+        {
+            doorCreaking.Play(); 
+        }
+        else
+        {
+            Debug.LogWarning("Door Creaking AudioSource not assigned on PressurePlateTrigger script for " + gameObject.name);
+        }
+
     }
+    
 }
