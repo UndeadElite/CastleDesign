@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
-public class NavigationScript : MonoBehaviour
+public class NavCrossbow : MonoBehaviour
 {
     public Transform Player;
     private NavMeshAgent agent;
@@ -37,15 +37,14 @@ public class NavigationScript : MonoBehaviour
         currentHealth -= amount;
 
         if (currentHealth <= 0)
-        { 
-            Death(); 
+        {
+            Death();
         }
     }
 
     void Death()
     {
-        // Death function
-        // TEMPORARY: Destroy Object
+        
         Destroy(gameObject);
     }
 }

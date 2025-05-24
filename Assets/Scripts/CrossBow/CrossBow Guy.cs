@@ -11,7 +11,7 @@ public class CrossBowGuy : MonoBehaviour
 
     private Transform player;
     private float attackTimer = 0f;
-    private NavigationScript navigationScript;
+    private NavCrossbow navigationScript;
 
     private void Start()
     {
@@ -20,7 +20,7 @@ public class CrossBowGuy : MonoBehaviour
         if (playerObj != null)
             player = playerObj.transform;
 
-        navigationScript = GetComponent<NavigationScript>();
+        navigationScript = GetComponent<NavCrossbow>();
     }
 
     private void Update()

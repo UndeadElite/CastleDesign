@@ -230,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (hit.transform.TryGetComponent<NavigationScript>(out NavigationScript target))
             {
-                target.TakeDamage(attackDamage);
+            target.TakeDamage(attackDamage);
             }
         }
     }
