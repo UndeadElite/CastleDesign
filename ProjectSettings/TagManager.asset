@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - HidingSpot
+  - Key
   layers:
   - Default
   - TransparentFX
