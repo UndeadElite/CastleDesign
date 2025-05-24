@@ -5,11 +5,9 @@ using UnityEngine.Audio;
 public class BreakableScript : MonoBehaviour, IInteractable
 {
     public GameObject originalObject;
-    public GameObject fracturedObject;
     public float explosionMinForce = 5;
     public float explosionMaxForce = 100;
     public float explosionForceRadius = 10;
-    public float fragScaleFactor = 1;
 
     AudioSource audioSource;
     public AudioClip ExplosionSFX;
