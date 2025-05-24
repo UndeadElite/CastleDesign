@@ -2004,8 +2004,53 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3bffe286ed4db8c42afa57cc4b0ae603, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1086460913}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3bffe286ed4db8c42afa57cc4b0ae603, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1086460915}
   m_SourcePrefab: {fileID: 100100000, guid: 3bffe286ed4db8c42afa57cc4b0ae603, type: 3}
+--- !u!1 &1086460912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3bffe286ed4db8c42afa57cc4b0ae603, type: 3}
+  m_PrefabInstance: {fileID: 1086460911}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1086460913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086460912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1130df03f6d030b4fa06156266e819ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4798659609596726068}
+--- !u!65 &1086460915
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086460912}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1133778408 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6989972652074480914, guid: e7136822e25d69243bad9ebe70a8c8e1, type: 3}
@@ -2386,11 +2431,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalObject: {fileID: 1281012143}
-  fracturedObject: {fileID: 0}
   explosionMinForce: 5
   explosionMaxForce: 100
   explosionForceRadius: 10
-  fragScaleFactor: 1
   ExplosionSFX: {fileID: 8300000, guid: 54b6287be531c3b488d37952c5787223, type: 3}
   rbs:
   - {fileID: 1394130857}
@@ -3627,6 +3670,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7940191947149657601, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8997595710175159998, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
       propertyPath: playerUI
       value: 
@@ -3661,6 +3708,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hidingcollider: {fileID: 0}
   isHiding: 0
+--- !u!114 &4798659609596726068 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8997595710175159998, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
+  m_PrefabInstance: {fileID: 4584386788590518930}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770808314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 176e743a1e55de548a3d31f8158f0894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5465928004613862836
 PrefabInstance:
   m_ObjectHideFlags: 0
