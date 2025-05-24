@@ -10,7 +10,7 @@ public class PressurePlateTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("dennis suger");
-            pressurePlateAnimator.SetTrigger("PressPlate");
+            pressurePlateAnimator.SetTrigger("PressurePlate1");
             doorAnimator.SetTrigger("OpenDoor");
 
         }
