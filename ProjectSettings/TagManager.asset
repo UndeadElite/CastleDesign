@@ -6,6 +6,10 @@ TagManager:
   tags:
   - HidingSpot
   - Key
+  - Enemy
+  - Wood
+  - Stone
+  - Glass
   layers:
   - Default
   - TransparentFX
