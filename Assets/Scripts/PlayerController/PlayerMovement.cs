@@ -28,17 +28,21 @@ public class PlayerMovement : MonoBehaviour
     public int attackDamage = 1;
     public LayerMask attackLayer;
 
+    [Header("PlayerUI")]
+    [SerializeField] private PlayerUI playerUI;
+    [SerializeField] private GameObject swordObject;
+
     public GameObject hitEffect;
     public AudioSource swordSwing;
     public AudioSource hitEnemy;
     public AudioSource hitStone;
     public AudioSource hitWood;
     public AudioSource hitGlass;
+    private bool hasSword = false;
 
     private bool attacking = false;
     private bool readyToAttack = true;
-    private int attackCount;
-
+ 
     private CharacterController controller;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
@@ -50,36 +54,35 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource audioSource;
 
     private const float CrouchRaycastOffset = 0.1f;
-
-    private enum AnimationState { Idle, Walk, Attack1, Attack2 }
-    private AnimationState currentAnimationState;
-
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         inputManager = InputManager.Instance;
-        cameraTransform = Camera.main.transform;
+        
         animator = GetComponentInChildren<Animator>();
         currentHealth = maxHealth;
+        if (playerUI != null)
+            playerUI.SetHealth(currentHealth, maxHealth);
 
         if (cameraTransform == null)
             Debug.LogError("Main Camera is missing!");
         if (animator == null)
             Debug.LogError("Animator component is missing!");
-       
+        swordObject.SetActive(false);
     }
-
     // Method to get current health
     public void TakeDamage(int damage)
-    {         if (isDead) return;
+    {
+        if (isDead) return;
         currentHealth -= damage;
         Debug.Log("Player took damage: " + damage + ", Current Health: " + currentHealth);
+        if (playerUI != null)
+            playerUI.SetHealth(currentHealth, maxHealth);
         if (currentHealth <= 0)
         {
             Die();
         }
     }
-
     private void Die ()
     {
         isDead = true;
@@ -90,10 +93,22 @@ public class PlayerMovement : MonoBehaviour
         // show Cursor
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-
     }
-
+    public void PickupSword()
+    {
+        hasSword = true;
+        EquipSword();
+    }
+    public void EquipSword()
+    {
+        if (hasSword && swordObject != null)
+            swordObject.SetActive(true);
+    }
+    public void UnequipSword()
+    {
+        if (swordObject != null)
+            swordObject.SetActive(false);
+    }
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -101,11 +116,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.LogWarning("Missing AudioSource component on player!");
         }
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        cameraTransform = Camera.main.transform;
+        if (cameraTransform == null)
+            Debug.LogError("Main Camera is missing!");
     }
-
     private void Update()
     {
         groundedPlayer = controller.isGrounded;
@@ -141,17 +157,23 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
 
         SetAnimations(move);
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && hasSword)
+        {
+            EquipSword();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && hasSword)
+        {
+            UnequipSword();
+        }
     }
-
     private Coroutine crouchCoroutine;
-
     private void ToggleCrouch()
     {
         if (crouchCoroutine != null)
         {
             StopCoroutine(crouchCoroutine);
         }
-
         if (isCrouching)
         {
             if (!Physics.Raycast(transform.position, Vector3.up, normalHeight - crouchHeight + CrouchRaycastOffset))
@@ -166,7 +188,6 @@ public class PlayerMovement : MonoBehaviour
             isCrouching = true;
         }
     }
-
     private System.Collections.IEnumerator SmoothCrouchTransition(float startHeight, float targetHeight)
     {
         float elapsedTime = 0f;
@@ -178,46 +199,37 @@ public class PlayerMovement : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         controller.height = targetHeight;
     }
-
-
     public void Attack()
     {
         if (!readyToAttack || attacking) return;
-
         StartCoroutine(PerformAttack());
     }
-
     private System.Collections.IEnumerator PerformAttack()
     {
         readyToAttack = false;
         attacking = true;
+        animator.SetBool("isAttacking", true);
+
         audioSource.pitch = Random.Range(0.9f, 1.1f);
-        Debug.Log("Playing swordSwing sound");
-        swordSwing.Play();
 
-        if (attackCount == 0)
+        // Only play sword swing sound if sword is equipped
+        if (swordObject != null && swordObject.activeSelf)
         {
-            ChangeAnimationState(AnimationState.Attack1);
-            attackCount++;
-        }
-        else
-        {
-            ChangeAnimationState(AnimationState.Attack2);
-            attackCount = 0;
+            swordSwing.Play();
         }
 
-        yield return new WaitForSeconds(attackDelay);
         AttackRaycast();
 
         yield return new WaitForSeconds(attackSpeed - attackDelay);
-        attacking = false;
-        readyToAttack = true;
-    }
 
-    private void AttackRaycast()
+        attacking = false;
+        animator.SetBool("isAttacking", false);
+        readyToAttack = true;
+        
+    }
+    public void AttackRaycast()
     {
         Vector3 rayOrigin = cameraTransform.position;
         Vector3 rayDirection = cameraTransform.forward;
@@ -228,13 +240,30 @@ public class PlayerMovement : MonoBehaviour
         {
             HitTarget(hit);
 
-            if (hit.transform.TryGetComponent<NavigationScript>(out NavigationScript target))
+            BreakableScript breakable = hit.transform.GetComponent<BreakableScript>();
+            if (breakable != null)
             {
-            target.TakeDamage(attackDamage);
+                breakable.Interact();
+            }
+
+            // Only deal damage or interact if sword is equipped
+            if (swordObject != null && swordObject.activeSelf)
+            {
+           
+
+                // Deal damage to enemies
+                if (hit.transform.CompareTag("Enemy"))
+                {
+                    Debug.Log("Enemy hit by player attack");
+                    NavigationScript target = hit.transform.GetComponent<NavigationScript>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(attackDamage);
+                    }
+                }
             }
         }
     }
-
     private void HitTarget(RaycastHit hit)
     {
         audioSource.pitch = 1;
@@ -257,29 +286,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         GameObject GO = Instantiate(hitEffect, hit.point, Quaternion.identity);
-        Destroy(GO, 20);
+        Destroy(GO, 10);
     }
-
-    private void ChangeAnimationState(AnimationState newState)
-    {
-        if (currentAnimationState == newState) return;
-
-        currentAnimationState = newState;
-        animator.CrossFadeInFixedTime(newState.ToString(), 0.2f);
-    }
-
     private void SetAnimations(Vector3 move)
     {
-        if (!attacking)
-        {
-            if (move.magnitude < 0.1f)
-            {
-                ChangeAnimationState(AnimationState.Idle);
-            }
-            else
-            {
-                ChangeAnimationState(AnimationState.Walk);
-            }
-        }
+        bool walking = move.magnitude >= 0.1f && !attacking;
+        animator.SetBool("isWalking", walking);
+        animator.SetBool("isAttacking", attacking);
     }
 }
