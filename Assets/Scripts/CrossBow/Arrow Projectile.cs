@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ArrowProjectile : MonoBehaviour
 {
-    [SerializeField] private float lifeTime = 5f; // Arrow will be destroyed after this time
+    [SerializeField] private float lifeTime = 10.0f; // Arrow will be destroyed after this time
     [SerializeField] private int damage = 10;     // Damage dealt to the player or target
 
     private void Start()

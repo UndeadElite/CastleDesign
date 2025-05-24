@@ -58,10 +58,11 @@ public class CrossBowGuy : MonoBehaviour
             // Fire an arrow
             GameObject arrow = Instantiate(arrowPrefab, firePoint.position, firePoint.rotation);
             Rigidbody rb = arrow.GetComponent<Rigidbody>();
-            rb.linearVelocity = firePoint.forward * arrowSpeed; // Updated to use linearVelocity
+            rb.linearVelocity = firePoint.forward * arrowSpeed; // Use linearVelocity as required
 
             attackTimer = 0f; // Reset the attack timer
         }
+
     }
 
     private void MoveTowardsPlayer()
