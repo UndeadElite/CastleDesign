@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("PlayerUI")]
     [SerializeField] private PlayerUI playerUI;
+    [SerializeField] private GameObject swordObject;
 
 
     public GameObject hitEffect;
@@ -103,6 +104,18 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    public void EquipSword()
+    {
+        if (swordObject != null)
+            swordObject.SetActive(true);
+    }
+
+    public void UnequipSword()
+    {
+        if (swordObject != null)
+            swordObject.SetActive(false);
+    }
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -154,6 +167,16 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
 
         SetAnimations(move);
+
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            EquipSword();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UnequipSword();
+        }
     }
 
     private Coroutine crouchCoroutine;
@@ -199,6 +222,8 @@ public class PlayerMovement : MonoBehaviour
     public void Attack()
     {
         if (!readyToAttack || attacking) return;
+        // Remove this line:
+        // if (swordObject == null || !swordObject.activeSelf) return; // Only attack if sword is equipped
 
         StartCoroutine(PerformAttack());
     }
@@ -207,26 +232,19 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToAttack = false;
         attacking = true;
+        animator.SetBool("isAttacking", true);
+
         audioSource.pitch = Random.Range(0.9f, 1.1f);
-        Debug.Log("Playing swordSwing sound");
         swordSwing.Play();
 
-        if (attackCount == 0)
-        {
-            ChangeAnimationState(AnimationState.Attack1);
-            attackCount++;
-        }
-        else
-        {
-            ChangeAnimationState(AnimationState.Attack2);
-            attackCount = 0;
-        }
+    
 
-        //yield return new WaitForSeconds(attackDelay);
         AttackRaycast();
 
         yield return new WaitForSeconds(attackSpeed - attackDelay);
+
         attacking = false;
+        animator.SetBool("isAttacking", false);
         readyToAttack = true;
     }
 
@@ -241,12 +259,22 @@ public class PlayerMovement : MonoBehaviour
         {
             HitTarget(hit);
 
-            if (hit.transform.TryGetComponent<NavigationScript>(out NavigationScript target))
+            // Only deal damage if sword is equipped
+            if (swordObject != null && swordObject.activeSelf)
             {
-                target.TakeDamage(attackDamage);
+                if (hit.transform.CompareTag("Enemy"))
+                {
+                    // Try to get NavigationScript and deal damage if found
+                    NavigationScript target = hit.transform.GetComponent<NavigationScript>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(attackDamage);
+                    }
+                }
             }
         }
     }
+
 
     private void HitTarget(RaycastHit hit)
     {
@@ -270,29 +298,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         GameObject GO = Instantiate(hitEffect, hit.point, Quaternion.identity);
-        Destroy(GO, 20);
-    }
-
-    private void ChangeAnimationState(AnimationState newState)
-    {
-        if (currentAnimationState == newState) return;
-
-        currentAnimationState = newState;
-        animator.CrossFadeInFixedTime(newState.ToString(), 0.2f);
+        Destroy(GO, 10);
     }
 
     private void SetAnimations(Vector3 move)
     {
-        if (!attacking)
-        {
-            if (move.magnitude < 0.1f)
-            {
-                ChangeAnimationState(AnimationState.Idle);
-            }
-            else
-            {
-                ChangeAnimationState(AnimationState.Walk);
-            }
-        }
+        bool walking = move.magnitude >= 0.1f && !attacking;
+        animator.SetBool("isWalking", walking);
+        animator.SetBool("isAttacking", attacking);
     }
 }
