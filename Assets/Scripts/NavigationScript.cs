@@ -4,17 +4,21 @@ public class NavigationScript : MonoBehaviour
 {
     public Transform Player;
     private NavMeshAgent agent;
+
+    int currentHealth;
+    public int maxHealth;
+
+    BreakableScript breakableScript;
+
     void Start()
     {
+        breakableScript = GetComponent<BreakableScript>();
         agent = GetComponent<NavMeshAgent>();
     }
     void Update()
     {
         agent.destination = Player.position;
     }
-
-    int currentHealth;
-    public int maxHealth;
 
     void Awake()
     {
@@ -35,6 +39,7 @@ public class NavigationScript : MonoBehaviour
     {
         // Death function
         // TEMPORARY: Destroy Object
+        breakableScript.Explode();
         Destroy(gameObject);
     }
 }

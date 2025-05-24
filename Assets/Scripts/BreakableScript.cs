@@ -21,7 +21,7 @@ public class BreakableScript : MonoBehaviour, IInteractable
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Explode()
+    public void Explode()
     {
         GetComponent<BoxCollider>().enabled = false;
 
