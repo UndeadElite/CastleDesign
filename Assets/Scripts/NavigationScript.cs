@@ -8,11 +8,11 @@ public class NavigationScript : MonoBehaviour
     int currentHealth;
     public int maxHealth;
 
-    BreakableScript breakableScript;
+   // BreakableScript breakableScript;
 
     void Start()
     {
-        breakableScript = GetComponent<BreakableScript>();
+       // breakableScript = GetComponent<BreakableScript>();
         agent = GetComponent<NavMeshAgent>();
     }
     void Update()
@@ -27,6 +27,7 @@ public class NavigationScript : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        Debug.Log("Enemy took damage: ");
         currentHealth -= amount;
 
         if (currentHealth <= 0)
@@ -39,7 +40,7 @@ public class NavigationScript : MonoBehaviour
     {
         // Death function
         // TEMPORARY: Destroy Object
-        breakableScript.Explode();
+       // breakableScript.Explode();
         Destroy(gameObject);
     }
 }

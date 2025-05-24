@@ -227,6 +227,7 @@ public class PlayerMovement : MonoBehaviour
         attacking = false;
         animator.SetBool("isAttacking", false);
         readyToAttack = true;
+        
     }
     public void AttackRaycast()
     {
@@ -253,6 +254,7 @@ public class PlayerMovement : MonoBehaviour
                 // Deal damage to enemies
                 if (hit.transform.CompareTag("Enemy"))
                 {
+                    Debug.Log("Enemy hit by player attack");
                     NavigationScript target = hit.transform.GetComponent<NavigationScript>();
                     if (target != null)
                     {

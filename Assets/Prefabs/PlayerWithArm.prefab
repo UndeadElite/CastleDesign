@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1842334441739318808}
   - component: {fileID: 6908828917874922102}
   - component: {fileID: 4947296421165173593}
+  - component: {fileID: 3951141735936481422}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -171,6 +172,21 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!114 &3951141735936481422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4114032926051545526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c414887a4020c944a03e123344cb0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractorSource: {fileID: 4806545277949683652}
+  InteractRange: 2
+  PickUpText: {fileID: 0}
 --- !u!1 &4688420516618946024
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +267,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5809817418376335067}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -305,9 +321,10 @@ GameObject:
   - component: {fileID: 6740494616119021155}
   - component: {fileID: 6280300419582409854}
   - component: {fileID: 152553427358427838}
+  - component: {fileID: 8751391367514011738}
   m_Layer: 0
   m_Name: PlayerWithArm
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -874,6 +891,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8751391367514011738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940191947149657601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fe7146ad661e14e8190efb9818848e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hidingcollider: {fileID: 0}
+  isHiding: 0
 --- !u!1001 &5642441579545345461
 PrefabInstance:
   m_ObjectHideFlags: 0
