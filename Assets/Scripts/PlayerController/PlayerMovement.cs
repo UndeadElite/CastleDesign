@@ -42,8 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool attacking = false;
     private bool readyToAttack = true;
-    private int attackCount;
-
+ 
     private CharacterController controller;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
@@ -55,10 +54,6 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource audioSource;
 
     private const float CrouchRaycastOffset = 0.1f;
-
-    private enum AnimationState { Idle, Walk, Attack1, Attack2 }
-    private AnimationState currentAnimationState;
-
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -75,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("Animator component is missing!");
        
     }
-
     // Method to get current health
     public void TakeDamage(int damage)
     {
@@ -89,7 +83,6 @@ public class PlayerMovement : MonoBehaviour
             Die();
         }
     }
-
     private void Die ()
     {
         isDead = true;
@@ -103,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
-
     public void EquipSword()
     {
         if (swordObject != null)
@@ -115,7 +107,6 @@ public class PlayerMovement : MonoBehaviour
         if (swordObject != null)
             swordObject.SetActive(false);
     }
-
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -131,7 +122,6 @@ public class PlayerMovement : MonoBehaviour
         if (cameraTransform == null)
             Debug.LogError("Main Camera is missing!");
     }
-
     private void Update()
     {
         groundedPlayer = controller.isGrounded;
@@ -178,9 +168,7 @@ public class PlayerMovement : MonoBehaviour
             UnequipSword();
         }
     }
-
     private Coroutine crouchCoroutine;
-
     private void ToggleCrouch()
     {
         if (crouchCoroutine != null)
@@ -202,7 +190,6 @@ public class PlayerMovement : MonoBehaviour
             isCrouching = true;
         }
     }
-
     private System.Collections.IEnumerator SmoothCrouchTransition(float startHeight, float targetHeight)
     {
         float elapsedTime = 0f;
@@ -217,14 +204,9 @@ public class PlayerMovement : MonoBehaviour
 
         controller.height = targetHeight;
     }
-
-
     public void Attack()
     {
         if (!readyToAttack || attacking) return;
-        // Remove this line:
-        // if (swordObject == null || !swordObject.activeSelf) return; // Only attack if sword is equipped
-
         StartCoroutine(PerformAttack());
     }
 
@@ -235,9 +217,12 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isAttacking", true);
 
         audioSource.pitch = Random.Range(0.9f, 1.1f);
-        swordSwing.Play();
 
-    
+        // Only play sword swing sound if sword is equipped
+        if (swordObject != null && swordObject.activeSelf)
+        {
+            swordSwing.Play();
+        }
 
         AttackRaycast();
 
@@ -247,8 +232,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isAttacking", false);
         readyToAttack = true;
     }
-
-    private void AttackRaycast()
+    public void AttackRaycast()
     {
         Vector3 rayOrigin = cameraTransform.position;
         Vector3 rayDirection = cameraTransform.forward;
@@ -274,8 +258,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-
     private void HitTarget(RaycastHit hit)
     {
         audioSource.pitch = 1;
