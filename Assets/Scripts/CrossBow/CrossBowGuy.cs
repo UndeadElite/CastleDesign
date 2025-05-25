@@ -9,9 +9,23 @@ public class CrossBowGuy : MonoBehaviour
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private float detectionRange = 15f;
     [SerializeField] private float stopDistance = 6f; // Distance to stop and aim
+    [SerializeField] private float retreatDistance = 3f; // Distance to start moving back
     [SerializeField] private LayerMask visionMask; // Set this in the Inspector to include walls and player
     [SerializeField] private Transform[] patrolPoints;
     [SerializeField] private float patrolPointTolerance = 0.5f;
+
+    private HidingScript playerHidingScript;
+    private PlayerMovement playerMovement;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip shootClip;
+    [SerializeField] private AudioClip dieClip;
+    [SerializeField] private AudioClip reloadClip; 
+    private AudioSource audioSource;
+
+    [Header("Health")]
+    [SerializeField] private int maxHealth = 3;
+    private int currentHealth;
 
     private Transform player;
     private float attackTimer = 0f;
@@ -22,6 +36,10 @@ public class CrossBowGuy : MonoBehaviour
     private void Awake()
     {
         enemyDrop = GetComponent<EnemyDrop>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        currentHealth = maxHealth;
     }
 
     private void Start()
@@ -29,7 +47,10 @@ public class CrossBowGuy : MonoBehaviour
         // Find the player by tag
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
+        {
             player = playerObj.transform;
+            playerHidingScript = playerObj.GetComponent<HidingScript>();
+        }
 
         agent = GetComponent<NavMeshAgent>();
 
@@ -48,18 +69,27 @@ public class CrossBowGuy : MonoBehaviour
 
         if (distance <= detectionRange && HasLineOfSight())
         {
-            if (distance > stopDistance)
+            if (distance < retreatDistance)
             {
-                // Chase the player
+                // Move backward from the player
+                Vector3 dirFromPlayer = (transform.position - player.position).normalized;
+                Vector3 retreatTarget = transform.position + dirFromPlayer * 2f; // Move back 2 units
                 agent.isStopped = false;
-                agent.destination = player.position;
+                agent.destination = retreatTarget;
+                AimAtPlayer();
             }
-            else
+            else if (distance < stopDistance)
             {
                 // Stop, aim, and attack
                 agent.isStopped = true;
                 AimAtPlayer();
                 AttackPlayer();
+            }
+            else
+            {
+                // Chase the player
+                agent.isStopped = false;
+                agent.destination = player.position;
             }
         }
         else
@@ -83,14 +113,18 @@ public class CrossBowGuy : MonoBehaviour
 
     private bool HasLineOfSight()
     {
-        Vector3 origin = transform.position + Vector3.up * 1.0f; // Adjust height as needed
+        // If player is hiding, enemy cannot see them
+        if (playerHidingScript != null && playerHidingScript.isHiding)
+            return false;
+
+        Vector3 origin = transform.position + Vector3.up * 1.0f; 
         Vector3 direction = (player.position + Vector3.up * 1.0f) - origin;
         float distance = Vector3.Distance(origin, player.position + Vector3.up * 1.0f);
 
-        // Raycast only hits objects on visionMask (set to include walls and player)
+       
         if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, distance, visionMask))
         {
-            // Only see the player if the first thing hit is the player
+          
             return hit.transform == player;
         }
         return false;
@@ -109,31 +143,39 @@ public class CrossBowGuy : MonoBehaviour
 
         if (attackTimer >= attackCooldown)
         {
-            // Fire an arrow
             GameObject arrow = Instantiate(arrowPrefab, firePoint.position, firePoint.rotation);
             Rigidbody rb = arrow.GetComponent<Rigidbody>();
-            rb.linearVelocity = firePoint.forward * arrowSpeed; // Use linearVelocity as required
+            rb.linearVelocity = firePoint.forward * arrowSpeed;
 
-            attackTimer = 0f; // Reset the attack timer
+            if (shootClip != null && audioSource != null)
+                audioSource.PlayOneShot(shootClip);
+
+            // Play reload sound after shooting
+            if (reloadClip != null && audioSource != null)
+                audioSource.PlayOneShot(reloadClip);
+
+            attackTimer = 0f;
         }
+    }
 
+    public void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     private void Die()
     {
+        if (dieClip != null && audioSource != null)
+            audioSource.PlayOneShot(dieClip);
+
         if (enemyDrop != null)
             enemyDrop.Drop();
 
-        Destroy(gameObject);
-    }
-
-    public void OnPlayerDetected(Transform player)
-    {
-        // Start aiming and attacking
-    }
-
-    public void OnPlayerLost()
-    {
-        // Stop attacking, resume patrol, etc.
+        Destroy(gameObject, dieClip != null ? dieClip.length : 0f);
     }
 }
+

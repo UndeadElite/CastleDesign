@@ -838,7 +838,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7940191947149657601, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1741548676}
   m_SourcePrefab: {fileID: 100100000, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
 --- !u!1 &640174257 stripped
 GameObject:
@@ -1186,11 +1189,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.14474034, y: 0.1437825, z: 0.16879761}
   m_Center: {x: -2.6330786, y: 0.4304865, z: -0.6299456}
---- !u!4 &949517569 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 937408398573834981, guid: fbec43ac3f6224f42be3e0d5b60f98e1, type: 3}
-  m_PrefabInstance: {fileID: 519974433610896350}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &995368603 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3672548509089925874, guid: e7136822e25d69243bad9ebe70a8c8e1, type: 3}
@@ -2144,7 +2142,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8997595710175159998, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
   m_PrefabInstance: {fileID: 638449807}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1741548668}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 176e743a1e55de548a3d31f8158f0894, type: 3}
@@ -3206,6 +3204,25 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2107122573}
   m_SourcePrefab: {fileID: 100100000, guid: e7136822e25d69243bad9ebe70a8c8e1, type: 3}
+--- !u!1 &1741548668 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7940191947149657601, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
+  m_PrefabInstance: {fileID: 638449807}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1741548676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741548668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fe7146ad661e14e8190efb9818848e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hidingcollider: {fileID: 0}
+  isHiding: 0
 --- !u!1 &1781050514
 GameObject:
   m_ObjectHideFlags: 0
@@ -4120,6 +4137,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4171058250026451187, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
+      propertyPath: dieClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c535e4388e6e1034d87a6e8ccb72f4ab, type: 3}
+    - target: {fileID: 4171058250026451187, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
+      propertyPath: shootClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c03af8724681d4f4c9015164c9d3016c, type: 3}
+    - target: {fileID: 4171058250026451187, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
+      propertyPath: reloadClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 839e36921cdcfcd4980ac25bb333d5b0, type: 3}
+    - target: {fileID: 4171058250026451187, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 2084535730}
@@ -4130,7 +4159,11 @@ PrefabInstance:
     - target: {fileID: 7244435001956774143, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
       propertyPath: Player
       value: 
-      objectReference: {fileID: 949517569}
+      objectReference: {fileID: 1435602956}
+    - target: {fileID: 7244435001956774143, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7564642066865633924, guid: 5f296460c87480045864ed7f1f749e7a, type: 3}
       propertyPath: m_Name
       value: CrossBow man 2
