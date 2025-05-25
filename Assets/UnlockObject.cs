@@ -5,6 +5,7 @@ using static Interactor;
 public class UnlockObject : MonoBehaviour, IInteractable
 {
     public Animator doorAnimator;
+    public AudioSource doorCreaking;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,14 +25,27 @@ public class UnlockObject : MonoBehaviour, IInteractable
         // Check if the player is holding the key
         if (PickUpObject.playerIsHolding)
         {
-            // Unlock the door (this object)
-            gameObject.SetActive(false);
+            // Play the unlock/open animation if the Animator is assigned
+            if (doorAnimator != null)
+            {
+                doorAnimator.SetTrigger("OpenDoor");
+            }
+            else
+            {
+                Debug.LogWarning("No Animator assigned to UnlockObject.");
+            }
+
+            if (doorCreaking != null)
+            {
+                doorCreaking.Play();
+            }
+            else
+            {
+                Debug.LogWarning("Door Creaking AudioSource not assigned on PressurePlateTrigger script for " + gameObject.name);
+            }
 
             // Set the key to not held anymore
             PickUpObject.playerIsHolding = false;
-
-            // Optionally, you can add logic here to open the door or play an animation
-            // e.g., DoorObject.SetActive(true);
         }
         else
         {

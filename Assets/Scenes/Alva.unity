@@ -196,6 +196,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49449518d22ec034e9f19e885126e80d, type: 3}
+--- !u!82 &322621844 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 3432517798397833412, guid: 8e606004af7d1a54c97daabfc1dc80eb, type: 3}
+  m_PrefabInstance: {fileID: 1213067686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &322621845 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1643187993587327425, guid: 8e606004af7d1a54c97daabfc1dc80eb, type: 3}
+  m_PrefabInstance: {fileID: 1213067686}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &496404667 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4806545277949683652, guid: a40ad480d4915f2428f1cd8079197a2e, type: 3}
@@ -338,7 +348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cfc8bd3bc6a764bb360ff44928a80e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorAnimator: {fileID: 0}
+  doorAnimator: {fileID: 322621845}
+  doorCreaking: {fileID: 322621844}
 --- !u!1 &1175312305
 GameObject:
   m_ObjectHideFlags: 0
