@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1809253747167719261}
   - component: {fileID: 8515452445768843955}
   - component: {fileID: 3747487653846696688}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: pasted__Floor (1)
-  m_TagString: Untagged
+  m_TagString: Stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

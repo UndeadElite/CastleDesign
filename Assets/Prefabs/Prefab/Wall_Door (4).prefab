@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7123909171552367228}
   - component: {fileID: 713915648721788265}
   - component: {fileID: 782765303762433680}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_Door (4)
-  m_TagString: Untagged
+  m_TagString: Stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

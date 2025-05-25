@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/David.unity
     guid: 4f3e349b02b135b46b7f9f4dc4b7a10f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Oscar.unity
     guid: fb2eda3a618fb7c49a76a20b4a015c95
   m_configObjects:
