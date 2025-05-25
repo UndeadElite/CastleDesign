@@ -4,6 +4,7 @@ public class NavCrossbow : MonoBehaviour
 {
     public Transform Player;
     private NavMeshAgent agent;
+    private bool isMoving = true; // Track movement state
 
     void Start()
     {
@@ -12,7 +13,7 @@ public class NavCrossbow : MonoBehaviour
 
     void Update()
     {
-        if (agent.enabled && agent.isActiveAndEnabled)
+        if (agent.enabled && agent.isActiveAndEnabled && isMoving)
         {
             agent.destination = Player.position;
         }
@@ -21,6 +22,7 @@ public class NavCrossbow : MonoBehaviour
     public void SetAgentMoving(bool moving)
     {
         if (agent == null) return;
+        isMoving = moving;
         agent.isStopped = !moving;
     }
 
@@ -44,7 +46,6 @@ public class NavCrossbow : MonoBehaviour
 
     void Death()
     {
-        
         Destroy(gameObject);
     }
 }
