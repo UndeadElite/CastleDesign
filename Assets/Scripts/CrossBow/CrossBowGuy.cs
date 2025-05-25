@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CrossBowGuy : MonoBehaviour
 {
@@ -7,12 +8,16 @@ public class CrossBowGuy : MonoBehaviour
     [SerializeField] private float arrowSpeed = 20f;
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private float detectionRange = 15f;
-    [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float stopDistance = 6f; // Distance to stop and aim
+    [SerializeField] private LayerMask visionMask; // Set this in the Inspector to include walls and player
+    [SerializeField] private Transform[] patrolPoints;
+    [SerializeField] private float patrolPointTolerance = 0.5f;
 
     private Transform player;
     private float attackTimer = 0f;
-    private NavCrossbow navigationScript;
     private EnemyDrop enemyDrop;
+    private NavMeshAgent agent;
+    private int currentPatrolIndex = 0;
 
     private void Awake()
     {
@@ -26,7 +31,12 @@ public class CrossBowGuy : MonoBehaviour
         if (playerObj != null)
             player = playerObj.transform;
 
-        navigationScript = GetComponent<NavCrossbow>();
+        agent = GetComponent<NavMeshAgent>();
+
+        if (patrolPoints != null && patrolPoints.Length > 0)
+        {
+            agent.destination = patrolPoints[0].position;
+        }
     }
 
     private void Update()
@@ -36,16 +46,54 @@ public class CrossBowGuy : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, player.position);
 
-        if (distance <= detectionRange)
+        if (distance <= detectionRange && HasLineOfSight())
         {
-            navigationScript.SetAgentMoving(false); // Stop moving
-            AimAtPlayer();
-            AttackPlayer();
+            if (distance > stopDistance)
+            {
+                // Chase the player
+                agent.isStopped = false;
+                agent.destination = player.position;
+            }
+            else
+            {
+                // Stop, aim, and attack
+                agent.isStopped = true;
+                AimAtPlayer();
+                AttackPlayer();
+            }
         }
         else
         {
-            navigationScript.SetAgentMoving(true); // Move toward player
+            Patrol();
         }
+    }
+
+    private void Patrol()
+    {
+        if (patrolPoints == null || patrolPoints.Length == 0)
+            return;
+
+        agent.isStopped = false;
+        if (agent.remainingDistance < patrolPointTolerance)
+        {
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            agent.destination = patrolPoints[currentPatrolIndex].position;
+        }
+    }
+
+    private bool HasLineOfSight()
+    {
+        Vector3 origin = transform.position + Vector3.up * 1.0f; // Adjust height as needed
+        Vector3 direction = (player.position + Vector3.up * 1.0f) - origin;
+        float distance = Vector3.Distance(origin, player.position + Vector3.up * 1.0f);
+
+        // Raycast only hits objects on visionMask (set to include walls and player)
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, distance, visionMask))
+        {
+            // Only see the player if the first thing hit is the player
+            return hit.transform == player;
+        }
+        return false;
     }
 
     private void AimAtPlayer()
@@ -69,17 +117,6 @@ public class CrossBowGuy : MonoBehaviour
             attackTimer = 0f; // Reset the attack timer
         }
 
-    }
-
-    private void MoveTowardsPlayer()
-    {
-        
-        Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0; // Prevent moving up/down
-        transform.position += direction * moveSpeed * Time.deltaTime;
-
-        // Face the player while moving
-        AimAtPlayer();
     }
 
     private void Die()
