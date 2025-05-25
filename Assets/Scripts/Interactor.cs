@@ -33,6 +33,7 @@ public class Interactor : MonoBehaviour
         {
             if (hitInfo2.collider.gameObject.TryGetComponent(out IInteractable interactObj))
             {
+                Debug.Log("Looking at interactable object: " + hitInfo2.collider.gameObject.name);
                 if (hitInfo2.collider.CompareTag("Key"))
                 {
                     PickUpText.SetActive(true);
