@@ -17,6 +17,10 @@ public class OscarEnemy : MonoBehaviour
     public LayerMask viewMask;
     private HidingScript playerHidingScript;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip attackClip;
+
 
 
     private NavMeshAgent agent;
@@ -238,10 +242,15 @@ public class OscarEnemy : MonoBehaviour
         canAttack = false;
         agent.isStopped = true;
 
-        // Simple forward placement of collider
+        // Play attack sound
+        if (audioSource != null && attackClip != null)
+        {
+            audioSource.PlayOneShot(attackClip);
+        }
+
         if (attackColliderObject != null)
         {
-            attackColliderObject.transform.localPosition = new Vector3(0, 1, 1); // Adjust Y/Z as needed
+            attackColliderObject.transform.localPosition = new Vector3(0, 1, 1); 
             attackColliderObject.transform.localRotation = Quaternion.identity;
             attackColliderObject.SetActive(true);
         }
@@ -256,8 +265,9 @@ public class OscarEnemy : MonoBehaviour
         agent.isStopped = false;
         canAttack = true;
     }
-
-
-
-
 }
+
+
+
+
+
