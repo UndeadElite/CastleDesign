@@ -322,6 +322,7 @@ GameObject:
   - component: {fileID: 6280300419582409854}
   - component: {fileID: 152553427358427838}
   - component: {fileID: 5406941754666525274}
+  - component: {fileID: 4449934992322326561}
   m_Layer: 3
   m_Name: PlayerWithArm
   m_TagString: Player
@@ -389,7 +390,7 @@ MonoBehaviour:
   gravityValue: -10
   normalHeight: 2
   crouchHeight: 1
-  maxHealth: 2
+  maxHealth: 3
   attackDistance: 2.5
   attackDelay: 0.4
   attackSpeed: 1
@@ -914,6 +915,20 @@ CapsuleCollider:
   m_Height: 2.000729
   m_Direction: 1
   m_Center: {x: 0, y: 0.002047062, z: 0}
+--- !u!114 &4449934992322326561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940191947149657601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fe7146ad661e14e8190efb9818848e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hidingcollider: {fileID: 0}
+  isHiding: 0
 --- !u!1001 &5642441579545345461
 PrefabInstance:
   m_ObjectHideFlags: 0

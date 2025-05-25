@@ -77,25 +77,28 @@ public class PlayerMovement : MonoBehaviour
         currentHealth -= damage;
         Debug.Log("Player took damage: " + damage + ", Current Health: " + currentHealth);
         if (playerUI != null)
+        {
             playerUI.SetHealth(currentHealth, maxHealth);
+         
+        }
         if (currentHealth <= 0)
         {
             Die();
         }
     }
-    private void Die ()
+    private void Die()
     {
         isDead = true;
         Debug.Log("Player is dead!");
-        // turn off player movement
+        // Freeze the game and show Game Over UI
+        Object.FindAnyObjectByType<PlayerUI>().ShowGameOver();
+        // Disable player controls AFTER showing UI
         enabled = false;
         controller.enabled = false;
-        // show Cursor
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
     public void PickupSword()
     {
+        
         hasSword = true;
         EquipSword();
     }
