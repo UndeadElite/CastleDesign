@@ -6,6 +6,8 @@ public class UnlockObject : MonoBehaviour, IInteractable
 {
     public Animator doorAnimator;
     public AudioSource doorCreaking;
+    public PickUpObject pickUpObject;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,6 +44,12 @@ public class UnlockObject : MonoBehaviour, IInteractable
             else
             {
                 Debug.LogWarning("Door Creaking AudioSource not assigned on PressurePlateTrigger script for " + gameObject.name);
+            }
+
+            // Hide the key object if it exists
+            if (PickUpObject.playerIsHolding && pickUpObject.ObjectOnPlayer != null)
+            {
+                pickUpObject.ObjectOnPlayer.SetActive(false);
             }
 
             // Set the key to not held anymore
