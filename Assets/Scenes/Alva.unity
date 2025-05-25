@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &396752938 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9053072444714145641, guid: dfe6835ab36884141a886fbab9d46a1f, type: 3}
+  m_PrefabInstance: {fileID: 8688329003245613877}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &696006187
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +341,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
+  - {fileID: 2100000, guid: c08ad53b74f325b43a5e5b2491bf61fd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3099,7 +3104,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   NoiseModule:
-    enabled: 0
+    enabled: 1
     strength:
       serializedVersion: 2
       minMaxState: 0
@@ -5178,12 +5183,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877817949}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.6213703, y: -3.407062, z: 4.561713}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 0.374, y: -3.47, z: 0.03}
+  m_LocalScale: {x: 1.722997, y: 1.2060977, z: 1.7229973}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 396752938}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &999883107
 GameObject:
@@ -5750,6 +5755,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2878325323998872912, guid: 08d0556869c38574a8542328398dad5d, type: 3}
+      propertyPath: doorSmoke
+      value: 
+      objectReference: {fileID: 877817951}
+    - target: {fileID: 2878325323998872912, guid: 08d0556869c38574a8542328398dad5d, type: 3}
       propertyPath: doorAnimator
       value: 
       objectReference: {fileID: 1036144370}
@@ -5816,7 +5825,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 9053072444714145641, guid: dfe6835ab36884141a886fbab9d46a1f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 877817952}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfe6835ab36884141a886fbab9d46a1f, type: 3}
 --- !u!1660057539 &9223372036854775807
@@ -5829,6 +5841,5 @@ SceneRoots:
   - {fileID: 1962833185}
   - {fileID: 999883110}
   - {fileID: 1980333025}
-  - {fileID: 877817952}
   - {fileID: 6870360572505104170}
   - {fileID: 8688329003245613877}

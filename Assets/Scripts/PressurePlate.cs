@@ -5,6 +5,7 @@ public class PressurePlateTrigger : MonoBehaviour
     public Animator pressurePlateAnimator;
     public Animator doorAnimator;
     public AudioSource doorCreaking;
+    public ParticleSystem doorSmoke; 
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,17 +15,24 @@ public class PressurePlateTrigger : MonoBehaviour
             pressurePlateAnimator.SetTrigger("PressurePlate1");
             doorAnimator.SetTrigger("OpenDoor");
 
+            if (doorSmoke != null)
+            {
+                doorSmoke.Play();
+            }
+            else
+            {
+                Debug.LogWarning("DoorSmoke ParticleSystem not assigned on PressurePlateTrigger script for " + gameObject.name);
+            }
         }
 
-        if (doorCreaking != null) 
+        if (doorCreaking != null)
         {
-            doorCreaking.Play(); 
+            doorCreaking.Play();
         }
         else
         {
             Debug.LogWarning("Door Creaking AudioSource not assigned on PressurePlateTrigger script for " + gameObject.name);
         }
-
     }
     
 }
