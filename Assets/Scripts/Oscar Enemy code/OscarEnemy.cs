@@ -15,6 +15,9 @@ public class OscarEnemy : MonoBehaviour
     public float secondaryDetectionRadius = 20f;
     public float secondaryFieldOfViewAngle = 45f;
     public LayerMask viewMask;
+    private HidingScript playerHidingScript;
+
+
 
     private NavMeshAgent agent;
     private Transform currentTarget;
@@ -32,6 +35,7 @@ public class OscarEnemy : MonoBehaviour
     public int damageToPlayer = 1;
     private bool canAttack = true;
 
+
     void Awake()
     {
         currentHealth = maxHealth;
@@ -40,16 +44,24 @@ public class OscarEnemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
         if (attackColliderObject != null)
             attackColliderObject.SetActive(false);
 
-        // Start patrolling
+        if (Player != null)
+            playerHidingScript = Player.GetComponent<HidingScript>();
+
         currentTarget = pointA;
         MoveToNextPoint();
     }
 
+
     void Update()
     {
+        // Prevent any movement or actions while in attack cooldown
+        if (!canAttack)
+            return;
+
         bool currentlySeeingPlayer = CanSeePlayer(out bool currentSeenInSecondary);
 
         if (currentlySeeingPlayer)
@@ -84,6 +96,7 @@ public class OscarEnemy : MonoBehaviour
         }
     }
 
+
     IEnumerator WaitAndSwitchTarget()
     {
         isWaiting = true;
@@ -110,6 +123,9 @@ public class OscarEnemy : MonoBehaviour
             Debug.LogWarning("Player reference is not assigned!");
             return false;
         }
+
+        if (playerHidingScript != null && playerHidingScript.isHiding)
+            return false;
 
         Vector3 directionToPlayer = Player.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
@@ -200,6 +216,7 @@ public class OscarEnemy : MonoBehaviour
         }
     }
 
+
     public void TakeDamage(int amount)
     {
         Debug.Log("Enemy took damage: ");
@@ -220,8 +237,14 @@ public class OscarEnemy : MonoBehaviour
     {
         canAttack = false;
         agent.isStopped = true;
+
+        // Simple forward placement of collider
         if (attackColliderObject != null)
+        {
+            attackColliderObject.transform.localPosition = new Vector3(0, 1, 1); // Adjust Y/Z as needed
+            attackColliderObject.transform.localRotation = Quaternion.identity;
             attackColliderObject.SetActive(true);
+        }
 
         yield return new WaitForSeconds(attackDuration);
 
@@ -233,6 +256,8 @@ public class OscarEnemy : MonoBehaviour
         agent.isStopped = false;
         canAttack = true;
     }
+
+
 
 
 }
