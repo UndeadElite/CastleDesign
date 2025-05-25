@@ -4,7 +4,7 @@ public class Enemy : MonoBehaviour
 {
     int EnemyHP = 2;
     PlayerMovement playerMovement;
-    private EnemyDrop enemyDrop;
+   private EnemyDrop enemyDrop;
 
     private void Awake()
     {

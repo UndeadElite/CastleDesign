@@ -89,4 +89,14 @@ public class CrossBowGuy : MonoBehaviour
 
         Destroy(gameObject);
     }
+
+    public void OnPlayerDetected(Transform player)
+    {
+        // Start aiming and attacking
+    }
+
+    public void OnPlayerLost()
+    {
+        // Stop attacking, resume patrol, etc.
+    }
 }
