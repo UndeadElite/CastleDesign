@@ -285,8 +285,11 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
-        GameObject GO = Instantiate(hitEffect, hit.point, Quaternion.identity);
-        Destroy(GO, 10);
+        if (swordObject != null && swordObject.activeSelf)
+        {
+            GameObject GO = Instantiate(hitEffect, hit.point, Quaternion.identity);
+            Destroy(GO, 10);
+        }
     }
     private void SetAnimations(Vector3 move)
     {
