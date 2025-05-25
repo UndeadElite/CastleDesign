@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - HidingSpot
+  - Key
+  - Enemy
+  - Wood
+  - Stone
+  - Glass
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -12,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Hittable
-  - 
+  - visionBlockLayers
   - 
   - 
   - 
