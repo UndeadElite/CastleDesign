@@ -255,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
                 if (hit.transform.CompareTag("Enemy"))
                 {
                     Debug.Log("Enemy hit by player attack");
-                    NavigationScript target = hit.transform.GetComponent<NavigationScript>();
+                    OscarEnemy target = hit.transform.GetComponent<OscarEnemy>();
                     if (target != null)
                     {
                         target.TakeDamage(attackDamage);
