@@ -260,6 +260,11 @@ public class PlayerMovement : MonoBehaviour
                     {
                         target.TakeDamage(attackDamage);
                     }
+                    CrossBowGuy crossbowGuy = hit.transform.GetComponent<CrossBowGuy>();
+                    if (crossbowGuy != null)
+                    {
+                        crossbowGuy.TakeDamage(attackDamage);
+                    }
                 }
             }
         }
@@ -283,6 +288,18 @@ public class PlayerMovement : MonoBehaviour
             case "Glass":
                 if (hitGlass != null) hitGlass.Play();
                 break;
+        }
+
+        // Check if the hit object is a CrossBowGuy
+        CrossBowGuy crossbowGuy = hit.collider.GetComponent<CrossBowGuy>();
+        if (crossbowGuy != null)
+        {
+            crossbowGuy.TakeDamage(attackDamage);
+            if (hitEnemy != null)
+                hitEnemy.Play();
+            if (hitEffect != null)
+                Instantiate(hitEffect, hit.point, Quaternion.identity);
+            return;
         }
 
         if (swordObject != null && swordObject.activeSelf)
