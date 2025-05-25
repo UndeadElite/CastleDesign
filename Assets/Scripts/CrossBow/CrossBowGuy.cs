@@ -160,6 +160,7 @@ public class CrossBowGuy : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        Debug.Log("CrossBowGuy took damage: " + amount);
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
